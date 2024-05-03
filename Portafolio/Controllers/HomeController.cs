@@ -15,6 +15,8 @@ namespace Portafolio.Controllers
         private readonly ServicioTransitorio servicioTransitorio2;
         private readonly ServicioDelimitado servicioDelimitado2;
         private readonly ServicioUnico servicioUnico2;
+        private readonly IConfiguration _configuration;
+        private readonly IMailTrap _mail;
 
         public HomeController(ILogger<HomeController> logger, 
             IRepositorioProyectos repositorioProyectos,
@@ -25,7 +27,10 @@ namespace Portafolio.Controllers
 
             ServicioTransitorio servicioTransitorio2,
             ServicioDelimitado servicioDelimitado2,
-            ServicioUnico servicioUnico2
+            ServicioUnico servicioUnico2,
+
+            IConfiguration configuration,
+            IMailTrap mail
             )
         {
             _logger = logger;
@@ -36,6 +41,8 @@ namespace Portafolio.Controllers
             this.servicioTransitorio2 = servicioTransitorio2;
             this.servicioDelimitado2 = servicioDelimitado2;
             this.servicioUnico2 = servicioUnico2;
+            _configuration = configuration;
+            _mail = mail;
         }
 
         public IActionResult Index()
@@ -54,6 +61,9 @@ namespace Portafolio.Controllers
             _logger.LogWarning("Este es un mensaje de warning");
             _logger.LogError("Este es un mensaje de error");
             _logger.LogCritical("Este es un mensaje de critical");
+
+            var apellido = _configuration.GetValue<string>("Apellido");
+            _logger.LogCritical("Este es el apellido: " + apellido);
 
             //ViewBag.Nombre = "Jimmy Grados";
             //var persona = new Persona()
@@ -91,7 +101,27 @@ namespace Portafolio.Controllers
             return View(modelo);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Proyectos()
+        {
+            var proyectos = _repositorioProyectos.ObtenerProyectos();
+            return View(proyectos);
+        }
+
+        [HttpGet]
+        public IActionResult Contacto()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Contacto(ContactoViewModel contactoViewModel)
+        {
+            await _mail.Send(contactoViewModel);
+            return RedirectToAction("Gracias");
+        }
+
+        //Patrón POST-Redirection-GET
+        public IActionResult Gracias()
         {
             return View();
         }
