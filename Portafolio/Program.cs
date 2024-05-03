@@ -1,7 +1,18 @@
+using Portafolio.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IRepositorioProyectos, RepositorioProyectos>();
+
+builder.Services.AddTransient<ServicioTransitorio>();
+builder.Services.AddScoped<ServicioDelimitado>();
+builder.Services.AddSingleton<ServicioUnico>();
+
+//Transient: Servicio transitorio
+//Scoped: Servicio delimitado, se instancia cada vez que se usa
+//Singleton: Servicio único, vive para siempre, sólo se instancia cuando la aplicación es reiniciada
 
 var app = builder.Build();
 

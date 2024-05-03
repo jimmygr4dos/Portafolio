@@ -1,10 +1,34 @@
 ﻿@* @model Persona *@
+@model HomeIndexViewModel
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
+<h2>Ejemplo 1</h2>
+<div>
+    Guid Transitorio: <b style="color: red">@Model.EjemploGUID_1.Transitorio</b>
+</div>
+<div>
+    Guid Delimitado: <b style="color: green">@Model.EjemploGUID_1.Delimitado</b>
+</div>
+<div>
+    Guid Único: <b style="color: blue">@Model.EjemploGUID_1.Unico</b>
+</div>
+
+<h2>Ejemplo 2</h2>
+<div>
+    Guid Transitorio: <b style="color: red">@Model.EjemploGUID_2.Transitorio</b>
+</div>
+<div>
+    Guid Delimitado: <b style="color: green">@Model.EjemploGUID_2.Delimitado</b>
+</div>
+<div>
+    Guid Único: <b style="color: blue">@Model.EjemploGUID_2.Unico</b>
+</div>
+
 <partial name="_Presentacion" />
 
 <partial name="_Habilidades" />
 
+<partial name="_SeccionProyectos" model="Model.Proyectos"/>
